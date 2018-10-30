@@ -1,0 +1,7 @@
+version: '3'
+services:
+  db-oracle:
+    build:
+      args:
+        - ORACLE_SSO_USERNAME=<EMAIL>
+        - ORACLE_SSO_PASS=<PASSWORD>
