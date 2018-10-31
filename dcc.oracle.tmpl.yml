@@ -1,0 +1,31 @@
+# https://github.com/oracle/docker-images
+# https://github.com/oracle/docker-images/tree/master/OracleDatabase/SingleInstance
+version: '3'
+services:
+  db-oracle:
+    image: dcc_oracle_db:${ORACLE_VERSION:-11.2.0.2}-${ORACLE_EDITION:-xe}
+    shm_size: 1G
+    environment:
+      # Default SID, best leave it as it is
+      - ORACLE_SID=XE
+      - ORACLE_PWD=${ORACLE_PWD:-xepass}
+    volumes:
+      - ./docker-context/scripts:/mnt/docker-scripts
+      - volume-oracle:/u01/app/oracle/oradata
+    ports:
+      # Available on specific versions only: Oracle Enterprise Manager Express (OEM): https://localhost:5500/em/
+      - "5500:5500"
+      # Oracle Application Express (APEX): http://localhost:8080/apex/apex_admin for re-set initial *admin* user password
+      - "8080:8080"
+      # DB port
+      - "1521:1521"
+    build:
+      context: ./docker-context/oracle/DbSingleInstance/dockerfiles/${ORACLE_VERSION:-11.2.0.2}
+      dockerfile: ./Dockerfile.${ORACLE_EDITION:-xe}
+      args:
+        - ORACLE_OTN_DB_DL_URL=http://download.oracle.com/otn/linux/oracle11g/xe/oracle-xe-11.2.0-1.0.x86_64.rpm.zip
+        - ORACLE_SSO_USERNAME=${ORACLE_SSO_USERNAME}
+        - ORACLE_SSO_PASS=${ORACLE_SSO_PASS}
+
+volumes:
+  volume-oracle:
