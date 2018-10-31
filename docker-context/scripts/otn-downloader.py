@@ -46,7 +46,7 @@ def main():
         """
         ap = argparse.ArgumentParser(description='OracleTechnologyNetwork downloader')
         ap.add_argument('url', help='URL to download resource from OTN')
-        ap.add_argument('--path', help='path to store the downloaded file', default='.')
+        ap.add_argument('--dest', help='path to store the downloaded file', default='.')
 
         # https://stackoverflow.com/a/24181138
         ap_group_req_names = ap.add_argument_group('named arguments (required)')
@@ -56,7 +56,11 @@ def main():
         return ap.parse_args()
 
     args = _handle_args()
-    otn_authenticate_and_download(args.username, args.password, args.url, args.path)
+
+    if not args.username or not args.password:
+        print('No (or empty) username/password provided')
+
+    otn_authenticate_and_download(args.username, args.password, args.url, args.dest)
 
 
 def otn_authenticate_and_download(username, password, url, dest_path='.'):
@@ -119,6 +123,7 @@ def otn_authenticate_and_download(username, password, url, dest_path='.'):
     form_login_post_url = url
     form_login_post_data = None
     response = sess.get(form_login_post_url)
+    url = re.sub(r'https*\:\/\/', '', url)
 
     try:
         print('login {0}: {1}'.format(login_attemps, response.url))
