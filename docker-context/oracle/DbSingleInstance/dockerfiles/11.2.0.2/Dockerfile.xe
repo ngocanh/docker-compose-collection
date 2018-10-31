@@ -47,9 +47,28 @@ ENV ORACLE_BASE=/u01/app/oracle \
 # Use second ENV so that variable get substituted
 ENV PATH=$ORACLE_HOME/bin:$PATH
 
+# [START] integration of otn-downloader
+ARG ORACLE_SSO_USERNAME
+ARG ORACLE_SSO_PASS
+ARG ORACLE_OTN_DB_DL_URL
+
+COPY otn-downloader ./otn-downloader
+
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python get-pip.py && \
+    rm get-pip.py && \
+    pip install -r otn-downloader/otn-downloader.requirements && \
+    rm -rf /root/.cache/pip && \
+    mkdir -p ${INSTALL_DIR} && \
+    echo "Prepare to download '$ORACLE_OTN_DB_DL_URL'" && \
+    python -u otn-downloader/otn-downloader.py -u "$ORACLE_SSO_USERNAME" -p "$ORACLE_SSO_PASS" --dest "$INSTALL_DIR" \
+        "$ORACLE_OTN_DB_DL_URL" && \
+    rm -rf otn-downloader
+# [END] integration of otn-downloader
+
 # Copy binaries
 # -------------
-COPY $INSTALL_FILE_1 $CONFIG_RSP $RUN_FILE $PWD_FILE $CHECK_DB_FILE $INSTALL_DIR/
+COPY $CONFIG_RSP $RUN_FILE $PWD_FILE $CHECK_DB_FILE $INSTALL_DIR/
 
 # Install Oracle Express Edition
 # ------------------------------
