@@ -1,3 +1,6 @@
 *.ipynb
 .ipynb_checkpoints
 docker-compose.override.yml
+docker-context/hana-xe/*
+!docker-context/hana-xe/hxe-config.json
+docker-context/oracle/DbSingleInstance/dockerfiles/*/otn-downloader

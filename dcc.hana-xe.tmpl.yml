@@ -1,0 +1,26 @@
+# https://www.sap.com/developer/tutorials/hxe-ua-install-using-docker.html
+# https://store.docker.com/images/sap-hana-express-edition
+version: '3'
+services:
+  hana-xe:
+    image: store/saplabs/hanaexpress:${HANA_XE_VERSION:-2.00.031.00.20180712.1}
+    hostname: hxe
+    command: ['--passwords-url', 'file:////hana/hxe-config.json', '--agree-to-sap-license']
+    ulimits:
+      nofile: 1048576
+    sysctls:
+      - kernel.shmmax=1073741824
+      - net.ipv4.ip_local_port_range=40000 60999
+      - kernel.shmmni=524288
+      - kernel.shmall=8388608
+    volumes:
+      - volume-hana-xe:/hana/mounts
+      - ./docker-context/hana-xe/hxe-config.json:/hana/hxe-config.json
+    ports:
+      - 39013:39013
+      - 39017:39017
+      - 39041-39045:39041-39045
+      - 1128-1129:1128-1129
+      - 59013-59014:59013-59014
+volumes:
+  volume-hana-xe:
