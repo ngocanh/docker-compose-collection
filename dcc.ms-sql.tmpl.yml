@@ -1,0 +1,16 @@
+# https://hub.docker.com/r/microsoft/mssql-server/
+version: '3'
+services:
+  db-ms-sql:
+    image: mcr.microsoft.com/mssql/server:2017-${MS_SQL_2017_VERSION:-latest}-ubuntu
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Pa$$w0rd#
+    volumes:
+      - ./docker-context/scripts:/mnt/docker-scripts
+      - volume-ms-sql:/var/opt/mssql/data
+    ports:
+      - "1433:1433"
+
+volumes:
+  volume-ms-sql:

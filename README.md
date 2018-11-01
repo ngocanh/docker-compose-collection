@@ -31,7 +31,7 @@ docker-compose file based on [official documentation](https://www.sap.com/develo
 ### Quick Start
 1. You've to be signed in with your _Docker ID_ - if you don't have you can register for free.
 
-    Though Hana XE free of charge the docker image is distributed through the commercial docker hub, that's why you've to be logged in.
+    Though Hana XE is free of charge the docker image is distributed through the commercial docker hub, that's why you've to be logged in.
 2. Start up Hana XE DB service
     ```
     docker-compose -f dcc.hana-xe.tmpl.yml up
@@ -47,6 +47,16 @@ docker-compose file based on [official documentation](https://www.sap.com/develo
     docker exec -it -u root dcc_hana-xe_1 su - hxeadm -c 'HDB info'
     ```
     The container name _'dcc_hana-xe_1' might_ be different for you, if so check for its ID/name with `docker ps -a`
+
+## MS SQL Server 2017
+
+Compose file based on https://hub.docker.com/r/microsoft/mssql-server/
+
+### Quick Start
+1. Pretty straight forward
+    ```
+    docker-compose -f dcc.ms-sql.tmpl.yml up
+    ```
 
 ## Advanced usage
 
