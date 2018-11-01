@@ -36,7 +36,7 @@ docker-compose file based on [official documentation](https://www.sap.com/develo
     ```
     docker-compose -f dcc.hana-xe.tmpl.yml up
     ```
-3. The image weights over 3GB and the initialization will take some time, go and a :coffee:.
+3. The image weights over 3GB and the initialization will take some time, go and get a :coffee:.
 
     When HXE is ready, check its status
     ```
@@ -47,3 +47,11 @@ docker-compose file based on [official documentation](https://www.sap.com/develo
     docker exec -it -u root dcc_hana-xe_1 su - hxeadm -c 'HDB info'
     ```
     The container name _'dcc_hana-xe_1' might_ be different for you, if so check for its ID/name with `docker ps -a`
+
+## Advanced usage
+
+* Start multiple services (Oracle DB, HXE, MS SQL in this example)
+    ```
+    docker-compose -f dcc.oracle.tmpl.yml -f dcc.hana-xe.tmpl.yml -f dcc.ms-sql.tmpl.yml -f docker-compose.override.yml up
+    ```
+    Or you can of course assemble a compose file with all the services you need.
