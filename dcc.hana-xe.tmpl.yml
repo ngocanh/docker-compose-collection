@@ -2,7 +2,7 @@
 # https://store.docker.com/images/sap-hana-express-edition
 version: '3'
 services:
-  hana-xe:
+  db-hana-xe:
     image: store/saplabs/hanaexpress:${HANA_XE_VERSION:-2.00.031.00.20180712.1}
     hostname: hxe
     command: ['--passwords-url', 'file:////hana/hxe-config.json', '--agree-to-sap-license']
