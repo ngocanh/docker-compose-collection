@@ -6,6 +6,12 @@ A set of compose files I collected through the time.
 
 NOTE: non of these services are any close to _production-ready_!
 
+## Compose Files
+* [Oracle B](#oracle-db-singleinstance)
+* [Hana eXpress Edition](#hana-express-edition-hxe)
+* [MS SQL Server](#ms-sql-server-2017)
+* [PHP Apache Dev Stack](#php-apache-dev-stack)
+
 ## Oracle DB (SingleInstance)
 !NOTE - integration tested with `11.2.0.2 XE` only!
 
