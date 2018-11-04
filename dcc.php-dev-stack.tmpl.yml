@@ -1,0 +1,55 @@
+# Better keep this untouched and add your changes in override.yml.
+version: '3'
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: reverse-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker-mount:/mnt/docker-mount
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  db:
+    image: mariadb:${MARIA_DB_VERSION:-latest}
+    volumes:
+      - volume-mysql:/var/lib/mysql:rw
+      - ./docker-mount:/mnt/docker-mount
+      - ./docker-context/php-dev-stack/mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    ports:
+      - "3306:3306"
+
+  php-apache:
+    image: php:${PHP_VERSION:-rc-apache}
+    links:
+      - db:db
+      - db:mariadb
+      - db:database
+      - db:mysql
+    volumes:
+      - ./docker-mount:/mnt/docker-mount
+      # mount your source code to /var/www or /var/www/html
+      # NOTE: if your host is not a linux machine the FS performance is really bad if the amount of files is high!
+      - ./docker-context/php-dev-stack/html_dir:/var/www/html
+      - ./docker-context/php-dev-stack/apache2/apache2.conf:/etc/apache2/apache2.conf
+      - ./docker-context/php-dev-stack/apache2/sites-enabled:/etc/apache2/sites-enabled
+      - ./docker-context/php-dev-stack/php/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      # Make sure to have this in your /etc/hosts
+      - VIRTUAL_HOST=php-dev-stack.loc
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:edge
+    volumes:
+      - ./docker-mount:/mnt/docker-mount
+      - /sessions
+    environment:
+      # Make sure to have this in your /etc/hosts
+      - VIRTUAL_HOST=phpmyadmin.loc
+      - PMA_ARBITRARY=1
+
+volumes:
+  volume-mysql:
